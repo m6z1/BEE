@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LillyBluetoothClassic</string>
+    <string name="app_name">BEE</string>
     <string name="connect">connect</string>
     <string name="disconnect">disconnect</string>
 </resources>

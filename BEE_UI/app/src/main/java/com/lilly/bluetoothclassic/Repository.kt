@@ -122,9 +122,9 @@ class Repository {
                             val device_name = device!!.name
                             val device_Address = device.address
                             
-                            // It only searches for devices with the prefix "RNM" in the Bluetooth device name.
+                            // It only searches for devices with the prefix "BEE" in the Bluetooth device name.
                             if (device_name != null && device_name.length > 4) {
-                                if (device_name.substring(0, 3) == "RNM") {
+                                if (device_name.substring(0, 3) == "BEE") {
                                     // filter your targetDevice and use connectToTargetedDevice()
                                     targetDevice = device
                                     foundDevice = true

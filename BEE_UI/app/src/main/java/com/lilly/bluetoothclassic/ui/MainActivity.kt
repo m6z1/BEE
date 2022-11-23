@@ -99,6 +99,15 @@ class MainActivity : AppCompatActivity() {
                 recv += it
                 sv_read_data.fullScroll(View.FOCUS_DOWN)
                 viewModel.txtRead.set(recv)
+
+                if(it.equals("생존자발견")){
+                    siren.setImageResource(R.drawable.survivor_on)
+                    Toast.makeText(this,"생존자를 발견하였습니다!",Toast.LENGTH_SHORT).show()
+                }
+                if(it.equals("구조요청")){
+                    siren.setImageResource(R.drawable.siren_on)
+                    Toast.makeText(this,"구조 요청이 왔습니다!", Toast.LENGTH_SHORT).show()
+                }
             }
         })
     }

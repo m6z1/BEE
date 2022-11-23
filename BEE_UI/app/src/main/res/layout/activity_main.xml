@@ -16,34 +16,67 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="100dp"
             android:layout_gravity="top"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp">
 
-            <TextView
-                android:id="@+id/txt_find"
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:text="생존자 발견"/>
+                android:layout_weight="1.5"
+                android:padding="5dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
 
-            <TextView
-                android:id="@+id/txt_btn"
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:src="@drawable/Siren_off"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:textFontWeight="1"                    android:gravity="center"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:text="구조 요청"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:text="구조 요청"/>
+                android:layout_weight="1.5"
+                android:padding="5dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:src="@drawable/survivor_off"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:height="0dp"
+                    android:textFontWeight="1"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:text="생존자 발견"/>
+            </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_connect"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
                 android:background="@drawable/button_back"
                 android:onClick="@{()->viewModel.onClickConnect()}"
                 android:paddingStart="10dp"

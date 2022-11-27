@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         //Data Receive
         viewModel.putTxt.observe(this, {
             if (it != null) {
-                recv += it
+                recv += (it + "\n")
                 sv_read_data.fullScroll(View.FOCUS_DOWN)
                 viewModel.txtRead.set(recv)
 

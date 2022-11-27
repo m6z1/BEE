@@ -40,6 +40,13 @@ class MainActivity : AppCompatActivity() {
 
         initObserving()
 
+        survivor.setOnClickListener {
+            survivor.setImageResource(R.drawable.survivor_off)
+        }
+        siren.setOnClickListener {
+            siren.setImageResource(R.drawable.siren_off)
+        }
+
     }
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -69,7 +76,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.requestBleOn.observe(this, {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startForResult.launch(enableBtIntent)
-
         })
 
         //Bluetooth Connect/Disconnect Event
@@ -100,14 +106,16 @@ class MainActivity : AppCompatActivity() {
                 sv_read_data.fullScroll(View.FOCUS_DOWN)
                 viewModel.txtRead.set(recv)
 
-                if(it.equals("생존자발견")){
-                    siren.setImageResource(R.drawable.survivor_on)
-                    Toast.makeText(this,"생존자를 발견하였습니다!",Toast.LENGTH_SHORT).show()
-                }
                 if(it.equals("구조요청")){
                     siren.setImageResource(R.drawable.siren_on)
                     Toast.makeText(this,"구조 요청이 왔습니다!", Toast.LENGTH_SHORT).show()
                 }
+
+                if(it.equals("생존자발견")){
+                    survivor.setImageResource(R.drawable.survivor_on)
+                    Toast.makeText(this,"생존자를 발견하였습니다!",Toast.LENGTH_SHORT).show()
+                }
+
             }
         })
     }

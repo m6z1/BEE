@@ -61,12 +61,15 @@ class Repository {
     fun scanDevice(){
         progressState.postValue("device 스캔 중...")
 
+        //리시버 등록
         registerBluetoothReceiver()
 
+        //블루투스 기기 검색 시작
         val bluetoothAdapter = mBluetoothAdapter
         foundDevice = false
-        bluetoothAdapter?.startDiscovery() //블루투스 기기 검색 시작
+        bluetoothAdapter?.startDiscovery()
     }
+
     fun registerBluetoothReceiver(){
         //intentfilter
         val stateFilter = IntentFilter()
@@ -90,6 +93,7 @@ class Repository {
                 if (device != null) {
                     name = device.name //broadcast를 보낸 기기의 이름을 가져온다.
                 }
+
                 when (action) {
                     BluetoothAdapter.ACTION_STATE_CHANGED -> {
                         val state = intent.getIntExtra(
@@ -117,23 +121,24 @@ class Repository {
                     }
                     BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
                     }
+
                     BluetoothDevice.ACTION_FOUND -> {
                         if (!foundDevice) {
                             val device_name = device!!.name
                             val device_Address = device.address
                             
                             // It only searches for devices with the prefix "BEE" in the Bluetooth device name.
-                            if (device_name != null && device_name.length > 4) {
+                            if(device_name!=null) {
                                 if (device_name.substring(0, 3) == "BEE") {
-                                    // filter your targetDevice and use connectToTargetedDevice()
                                     targetDevice = device
                                     foundDevice = true
+                                    //찾은 디바이스에 연결한다.
                                     connectToTargetedDevice(targetDevice)
                                 }
                             }
-                            
                         }
                     }
+
                     BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
                         if (!foundDevice) {
                             Util.showNotification("디바이스를 찾을 수 없습니다. 다시 시도해 주세요.")

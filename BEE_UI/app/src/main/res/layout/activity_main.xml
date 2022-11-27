@@ -34,8 +34,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
-                    android:src="@drawable/siren_off"
-                    android:onClick="@drawable/siren_off"/>
+                    android:src="@drawable/siren_off" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -61,8 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
-                    android:src="@drawable/survivor_off"
-                    android:onClick="@drawable/survivor_off"/>
+                    android:src="@drawable/survivor_off" />
 
                 <TextView
                     android:layout_width="match_parent"

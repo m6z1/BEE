@@ -107,7 +107,6 @@
                 android:layout_margin="10dp"
                 android:background="@drawable/button_back2"
                 android:enabled="@{viewModel.btnConnected?true:false}"
-                android:onClick="@{()->viewModel.onClickSendData(txtSend.getText().toString())}"
                 android:text="send data"
                 android:textColor="@color/white"
                 android:textStyle="bold" />

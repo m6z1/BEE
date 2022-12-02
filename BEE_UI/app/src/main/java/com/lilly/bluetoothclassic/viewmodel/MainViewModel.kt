@@ -61,14 +61,8 @@ class MainViewModel(private val repository: Repository): ViewModel() {
         repository.unregisterReceiver()
     }
 
-    fun onClickSendData(sendTxt: String){
+    fun onSendData(sendTxt: String){
         val byteArr = sendTxt.toByteArray(Charset.defaultCharset())
         repository.sendByteData(byteArr)
-        Util.showNotification("send data!")
     }
-
-
-
-
-
 }

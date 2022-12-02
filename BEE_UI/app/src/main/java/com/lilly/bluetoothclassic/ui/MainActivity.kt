@@ -7,11 +7,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import android.view.WindowInsetsController
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import com.lilly.bluetoothclassic.R
 import com.lilly.bluetoothclassic.databinding.ActivityMainBinding
@@ -20,13 +22,14 @@ import com.lilly.bluetoothclassic.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class MainActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<MainViewModel>()
 
     var mBluetoothAdapter: BluetoothAdapter? = null
     var recv: String = ""
+    var msg=""
+    var reset="r"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +50,31 @@ class MainActivity : AppCompatActivity() {
             siren.setImageResource(R.drawable.siren_off)
         }
 
+        btn_send.setOnClickListener(send_msg)
+
+        reset_lcd.setOnClickListener (reset_msg)
+
     }
 
+    val send_msg = View.OnClickListener {
+        msg=txt_send.getText().toString()
+        viewModel.onSendData(msg)
+        txt_send.setText("")
+        txt_send.requestFocus()
+
+        if (msg=="r") Util.showNotification("LCD 모니터 값을 초기화하였습니다!")
+        else Util.showNotification("메시지 전송 완료!")
+
+    }
+
+    val reset_msg  = View.OnClickListener{
+        viewModel.onSendData(reset)
+        Util.showNotification("LCD 모니터 값을 초기화하였습니다!")
+    }
+
+
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
+        if (result.resultCode == RESULT_OK) {
             val intent = result.data
             viewModel.onClickConnect()
         }
@@ -95,7 +119,7 @@ class MainActivity : AppCompatActivity() {
 
         //Bluetooth Connect Error
         viewModel.connectError.observe(this, {
-            Util.showNotification("Connect Error. Please check the device")
+            Util.showNotification("디바이스 연결에 실패하였습니다. 기기를 확인해주세요.")
             viewModel.setInProgress(false)
         })
 
@@ -140,10 +164,10 @@ class MainActivity : AppCompatActivity() {
             REQUEST_ALL_PERMISSION -> {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permissions granted!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "블루투스 연결에 성공하였습니다!", Toast.LENGTH_SHORT).show()
                 } else {
                     requestPermissions(permissions, REQUEST_ALL_PERMISSION)
-                    Toast.makeText(this, "Permissions must be granted", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "어플을 이용하기 위하여 블루투스 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -151,7 +175,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.txtRead.set("here you can see the message come")
+        viewModel.txtRead.set("디바이스가 보낸 메시지가 아직 없습니다.")
     }
 
     override fun onPause(){

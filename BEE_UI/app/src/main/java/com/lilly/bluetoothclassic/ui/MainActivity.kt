@@ -21,6 +21,9 @@ import com.lilly.bluetoothclassic.util.*
 import com.lilly.bluetoothclassic.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.lang.System.currentTimeMillis
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -51,9 +54,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         btn_send.setOnClickListener(send_msg)
-
-        reset_lcd.setOnClickListener (reset_msg)
-
+        reset_lcd.setOnClickListener (reset_lcd_msg)
+        reset_monitor.setOnClickListener (reset_monitor_msg)
     }
 
     val send_msg = View.OnClickListener {
@@ -62,14 +64,20 @@ class MainActivity : AppCompatActivity() {
         txt_send.setText("")
         txt_send.requestFocus()
 
-        if (msg=="r") Util.showNotification("LCD 모니터 값을 초기화하였습니다!")
+        if (msg==reset) reset_lcd_msg
         else Util.showNotification("메시지 전송 완료!")
 
     }
 
-    val reset_msg  = View.OnClickListener{
+    val reset_lcd_msg  = View.OnClickListener{
         viewModel.onSendData(reset)
         Util.showNotification("LCD 모니터 값을 초기화하였습니다!")
+    }
+
+    val reset_monitor_msg = View.OnClickListener{
+        viewModel.txtRead.set("")
+        Util.showNotification("출력창을 초기화하였습니다!")
+        viewModel.txtRead.set("출력 초기화 : " + getTime() + "\n")
     }
 
 
@@ -80,6 +88,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun getTime(): String {
+        val now=System.currentTimeMillis()
+        val date = Date(now)
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        val setTime = dateFormat.format(date)
+
+        return setTime
+    }
 
     private fun initObserving(){
 
@@ -103,19 +119,20 @@ class MainActivity : AppCompatActivity() {
         })
 
         //Bluetooth Connect/Disconnect Event
-        viewModel.connected.observe(this, {
+        viewModel.connected.observe(this) {
             if (it != null) {
                 if (it) {
                     viewModel.setInProgress(false)
                     viewModel.btnConnected.set(true)
                     Util.showNotification("디바이스와 연결되었습니다.")
+                    viewModel.txtRead.set("디바이스 연결 : " + getTime() + "\n")
                 } else {
                     viewModel.setInProgress(false)
                     viewModel.btnConnected.set(false)
                     Util.showNotification("디바이스와 연결이 해제되었습니다.")
                 }
             }
-        })
+        }
 
         //Bluetooth Connect Error
         viewModel.connectError.observe(this, {
@@ -132,12 +149,12 @@ class MainActivity : AppCompatActivity() {
 
                 if(it.equals("구조요청")){
                     siren.setImageResource(R.drawable.siren_on)
-                    Toast.makeText(this,"구조 요청이 왔습니다!", Toast.LENGTH_SHORT).show()
+                    Util.showNotification("구조 요청이 왔습니다!")
                 }
 
                 if(it.equals("생존자발견")){
                     survivor.setImageResource(R.drawable.survivor_on)
-                    Toast.makeText(this,"생존자를 발견하였습니다!",Toast.LENGTH_SHORT).show()
+                   Util.showNotification("생존자를 발견하였습니다!")
                 }
 
             }

@@ -148,18 +148,22 @@ class MainActivity : AppCompatActivity() {
         //Data Receive
         viewModel.putTxt.observe(this, {
             if (it != null) {
-                recv += (getTime() + " : "+ it + "\n")
-                sv_read_data.fullScroll(View.FOCUS_DOWN)
-                viewModel.txtRead.set(recv)
+                if(it.length > 12){
+                    Util.showNotification("12글자를 초과하여 문자를 보낼 수 없습니다.")
+                }else {
+                    recv += (getTime() + " : " + it + "\n")
+                    sv_read_data.fullScroll(View.FOCUS_DOWN)
+                    viewModel.txtRead.set(recv)
 
-                if(it.equals("구조요청")){
-                    siren.setImageResource(R.drawable.siren_on)
-                    Util.showNotification("구조 요청이 왔습니다!")
-                }
+                    if (it.equals("구조요청")) {
+                        siren.setImageResource(R.drawable.siren_on)
+                        Util.showNotification("구조 요청이 왔습니다!")
+                    }
 
-                if(it.equals("생존자발견")){
-                    survivor.setImageResource(R.drawable.survivor_on)
-                   Util.showNotification("생존자를 발견하였습니다!")
+                    if (it.equals("생존자발견")) {
+                        survivor.setImageResource(R.drawable.survivor_on)
+                        Util.showNotification("생존자를 발견하였습니다!")
+                    }
                 }
 
             }

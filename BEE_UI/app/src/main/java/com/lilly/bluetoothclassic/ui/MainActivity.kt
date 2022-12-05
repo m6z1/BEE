@@ -73,13 +73,14 @@ class MainActivity : AppCompatActivity() {
 
     val reset_lcd_msg  = View.OnClickListener{
         viewModel.onSendData(reset)
-        Util.showNotification("LCD 모니터 초기화 : \n" + reset)
+        Util.showNotification("LCD 모니터 초기화 : \n PUSH BUTTON!")
     }
 
     val reset_monitor_msg = View.OnClickListener{
         viewModel.txtRead.set("")
         Util.showNotification("출력창 초기화 완료")
-        viewModel.txtRead.set("출력 초기화 : " + getTime() + "\n")
+        recv = ("출력 초기화 : " + getTime() + "\n")
+        viewModel.txtRead.set(recv)
     }
 
 
@@ -127,7 +128,8 @@ class MainActivity : AppCompatActivity() {
                     viewModel.setInProgress(false)
                     viewModel.btnConnected.set(true)
                     Util.showNotification("디바이스와 연결되었습니다.")
-                    viewModel.txtRead.set("디바이스 연결 : " + getTime() + "\n")
+                    recv=("디바이스 연결 : " + getTime() + "\n")
+                    viewModel.txtRead.set(recv)
                 } else {
                     viewModel.setInProgress(false)
                     viewModel.btnConnected.set(false)

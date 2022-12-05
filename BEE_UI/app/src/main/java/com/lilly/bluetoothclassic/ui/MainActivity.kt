@@ -65,18 +65,20 @@ class MainActivity : AppCompatActivity() {
         txt_send.requestFocus()
 
         if (msg==reset) reset_lcd_msg
-        else Util.showNotification("메시지 전송 완료!")
+        else {
+            Util.showNotification("메시지 전송 완료 : " + msg)
+        }
 
     }
 
     val reset_lcd_msg  = View.OnClickListener{
         viewModel.onSendData(reset)
-        Util.showNotification("LCD 모니터 값을 초기화하였습니다!")
+        Util.showNotification("LCD 모니터 초기화 : \n" + reset)
     }
 
     val reset_monitor_msg = View.OnClickListener{
         viewModel.txtRead.set("")
-        Util.showNotification("출력창을 초기화하였습니다!")
+        Util.showNotification("출력창 초기화 완료")
         viewModel.txtRead.set("출력 초기화 : " + getTime() + "\n")
     }
 
@@ -130,6 +132,7 @@ class MainActivity : AppCompatActivity() {
                     viewModel.setInProgress(false)
                     viewModel.btnConnected.set(false)
                     Util.showNotification("디바이스와 연결이 해제되었습니다.")
+                    onResume()
                 }
             }
         }
@@ -143,7 +146,7 @@ class MainActivity : AppCompatActivity() {
         //Data Receive
         viewModel.putTxt.observe(this, {
             if (it != null) {
-                recv += (it + "\n")
+                recv += (getTime() + " : "+ it + "\n")
                 sv_read_data.fullScroll(View.FOCUS_DOWN)
                 viewModel.txtRead.set(recv)
 

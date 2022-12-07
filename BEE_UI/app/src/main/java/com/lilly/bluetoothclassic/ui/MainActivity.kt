@@ -4,7 +4,9 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.provider.MediaStore.Audio.Media
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
@@ -29,12 +31,17 @@ class MainActivity : AppCompatActivity() {
     var recv: String = ""
     var msg=""
     var reset="r"
+    var sound1 : MediaPlayer? = null
+    var sound2: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityMainBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewModel = viewModel
+
+        sound1 = MediaPlayer.create(this, R.raw.alarm)!!
+        sound2 = MediaPlayer.create(this, R.raw.soundsiren)!!
 
         if (!hasPermissions(this, PERMISSIONS)) {
             requestPermissions(PERMISSIONS, REQUEST_ALL_PERMISSION)
@@ -154,12 +161,16 @@ class MainActivity : AppCompatActivity() {
                     if (it.equals("구조요청")) {
                         siren.setImageResource(R.drawable.siren_on)
                         Util.showNotification("구조 요청이 왔습니다!")
+                        sound2?.start()
                     }
+                    sound2?.release()
 
                     if (it.equals("생존자발견")) {
                         survivor.setImageResource(R.drawable.survivor_on)
                         Util.showNotification("생존자를 발견하였습니다!")
+                        sound1?.start()
                     }
+                    sound2?.release()
                 }
 
             }

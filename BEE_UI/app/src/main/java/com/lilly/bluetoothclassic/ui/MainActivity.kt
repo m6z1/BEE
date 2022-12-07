@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
 
         if (msg==reset) reset_lcd_msg
         else {
-            Util.showNotification("메시지 전송 완료 : " + msg)
+            Util.showNotification("메시지 전송 완료 : $msg")
         }
 
     }
@@ -103,23 +103,23 @@ class MainActivity : AppCompatActivity() {
     private fun initObserving(){
 
         //Progress
-        viewModel.inProgress.observe(this, {
+        viewModel.inProgress.observe(this) {
             if (it.getContentIfNotHandled() == true) {
                 viewModel.inProgressView.set(true)
             } else {
                 viewModel.inProgressView.set(false)
             }
-        })
+        }
         //Progress text
-        viewModel.progressState.observe(this, {
+        viewModel.progressState.observe(this) {
             viewModel.txtProgress.set(it)
-        })
+        }
 
         //Bluetooth On 요청
-        viewModel.requestBleOn.observe(this, {
+        viewModel.requestBleOn.observe(this) {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startForResult.launch(enableBtIntent)
-        })
+        }
 
         //Bluetooth Connect/Disconnect Event
         viewModel.connected.observe(this) {
@@ -140,17 +140,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         //Bluetooth Connect Error
-        viewModel.connectError.observe(this, {
+        viewModel.connectError.observe(this) {
             Util.showNotification("디바이스 연결에 실패하였습니다. 기기를 확인해주세요.")
             viewModel.setInProgress(false)
-        })
+        }
 
         //Data Receive
-        viewModel.putTxt.observe(this, {
+        viewModel.putTxt.observe(this) {
             if (it != null) {
-                if(it.length > 12){
+                if (it.length > 12) {
                     Util.showNotification("12글자를 초과하여 문자를 보낼 수 없습니다.")
-                }else {
+                } else {
                     recv += (getTime() + " : " + it + "\n")
                     sv_read_data.fullScroll(View.FOCUS_DOWN)
                     viewModel.txtRead.set(recv)
@@ -167,7 +167,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
-        })
+        }
     }
     private fun hasPermissions(context: Context?, permissions: Array<String>): Boolean {
         for (permission in permissions) {

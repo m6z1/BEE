@@ -9,7 +9,9 @@ plugins {
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.1"
-
+    buildFeatures{
+        viewBinding true
+    }
     defaultConfig {
         applicationId "com.lilly.bluetoothclassic"
         minSdkVersion 26

@@ -1,19 +1,16 @@
 package com.lilly.bluetoothclassic.ui
 
-import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
-import android.view.WindowInsetsController
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import com.lilly.bluetoothclassic.R
 import com.lilly.bluetoothclassic.databinding.ActivityMainBinding
@@ -21,7 +18,6 @@ import com.lilly.bluetoothclassic.util.*
 import com.lilly.bluetoothclassic.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.System.currentTimeMillis
 import java.text.SimpleDateFormat
 import java.util.*
 

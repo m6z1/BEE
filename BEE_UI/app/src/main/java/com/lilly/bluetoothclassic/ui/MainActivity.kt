@@ -31,8 +31,7 @@ class MainActivity : AppCompatActivity() {
     var recv: String = ""
     var msg=""
     var reset="r"
-    var sound1 : MediaPlayer? = null
-    var sound2: MediaPlayer? = null
+    var sound: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +39,7 @@ class MainActivity : AppCompatActivity() {
             DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewModel = viewModel
 
-        sound1 = MediaPlayer.create(this, R.raw.alarm)!!
-        sound2 = MediaPlayer.create(this, R.raw.soundsiren)!!
+        sound = MediaPlayer.create(this, R.raw.soundsiren)!!
 
         if (!hasPermissions(this, PERMISSIONS)) {
             requestPermissions(PERMISSIONS, REQUEST_ALL_PERMISSION)
@@ -54,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         }
         siren.setOnClickListener {
             siren.setImageResource(R.drawable.siren_off)
+            sound?.release()
         }
 
         btn_send.setOnClickListener(send_msg)
@@ -63,15 +62,18 @@ class MainActivity : AppCompatActivity() {
 
     val send_msg = View.OnClickListener {
         msg=txt_send.getText().toString()
-        viewModel.onSendData(msg)
-        txt_send.setText("")
-        txt_send.requestFocus()
 
-        if (msg==reset) reset_lcd_msg
-        else {
-            Util.showNotification("메시지 전송 완료 : $msg")
+        if (msg.length > 12) {
+            Util.showNotification("12글자를 초과하여 문자를 보낼 수 없습니다.")
+        } else{
+            viewModel.onSendData(msg)
+            txt_send.setText("")
+            txt_send.requestFocus()
+            if (msg==reset) reset_lcd_msg
+            else {
+                Util.showNotification("메시지 전송 완료 : $msg")
+            }
         }
-
     }
 
     val reset_lcd_msg  = View.OnClickListener{
@@ -151,28 +153,21 @@ class MainActivity : AppCompatActivity() {
         //Data Receive
         viewModel.putTxt.observe(this) {
             if (it != null) {
-                if (it.length > 12) {
-                    Util.showNotification("12글자를 초과하여 문자를 보낼 수 없습니다.")
-                } else {
-                    recv += (getTime() + " : " + it + "\n")
-                    sv_read_data.fullScroll(View.FOCUS_DOWN)
-                    viewModel.txtRead.set(recv)
+                recv += (getTime() + " : " + it + "\n")
+                sv_read_data.fullScroll(View.FOCUS_DOWN)
+                viewModel.txtRead.set(recv)
 
-                    if (it.equals("구조요청")) {
-                        siren.setImageResource(R.drawable.siren_on)
-                        Util.showNotification("구조 요청이 왔습니다!")
-                        sound2?.start()
-                    }
-                    sound2?.release()
-
-                    if (it.equals("생존자발견")) {
-                        survivor.setImageResource(R.drawable.survivor_on)
-                        Util.showNotification("생존자를 발견하였습니다!")
-                        sound1?.start()
-                    }
-                    sound2?.release()
+                if (it.equals("구조요청")) {
+                    siren.setImageResource(R.drawable.siren_on)
+                    Util.showNotification("구조 요청이 왔습니다!")
+                    sound?.start()
                 }
 
+
+                if (it.equals("생존자발견")) {
+                    survivor.setImageResource(R.drawable.survivor_on)
+                    Util.showNotification("생존자를 발견하였습니다!")
+                }
             }
         }
     }

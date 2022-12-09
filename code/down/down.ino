@@ -1,23 +1,26 @@
-#include <DFRobotDFPlayerMini.h>
-
 #include <Servo.h>   
 #include <SoftwareSerial.h>
 #include <LiquidCrystal_I2C.h>
+#include <DFRobotDFPlayerMini.h>
 
 #define btnPin 9
 #define BT_TXD 10
 #define BT_RXD 11
 #define humanPin 7
+#define MP3Pin_1 4
+#define MP3Pin_2 5
 
 //블루투스
 SoftwareSerial bluetooth(BT_RXD, BT_TXD);
 
-//MP3 플레이어
-SoftwareSerial MP3Module(4,5);
-
 // 인체감지센서
 int statusPIR = 0;
+
+//버튼
 int statusBtn = 0;
+
+//MP3 플레이어
+SoftwareSerial MP3Module(MP3Pin_1, MP3Pin_2);
 
 // LCD
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -92,14 +95,14 @@ byte bt4[8] = {
 
 void setup()     
 {
-  //인체감지센서
-  pinMode(humanPin, INPUT);
-
   //블루투스 통신
   bluetooth.begin(9600);
 
-   // 버튼
+  // 버튼
   pinMode(btnPin, INPUT);
+  
+  //인체감지센서
+  pinMode(humanPin, INPUT);
   
   // LCD
   lcd.begin();
@@ -111,8 +114,6 @@ void setup()
   lcd.createChar(5, bt4);
   printLcd();
 
-  // 시리얼 모니터
-  Serial.begin(9600);
   // MP3 플레이어
   MP3Module.begin(9600);
   if (!MP3Player.begin(MP3Module)) {
@@ -137,7 +138,14 @@ void loop()
   // 안드로이드 -> 아두이노
   if(bluetooth.available()){
     char from=(char)bluetooth.read();
-    Serial.write(from);
+    msg=msg+from;
+  }else{
+    if(msg!=""){
+      if(msg=="r"&&msg!=reset_msg){
+        msg=reset_msg;
+      }
+      changeMsg();
+    }
   }
   
   //인체감지센서

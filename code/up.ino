@@ -30,10 +30,8 @@ void setup(){
   
   //부저
   pinMode(tonePin, OUTPUT);
-
- 
   
-  // 서보모터
+  // 적외선
   pinMode(rev_Right, INPUT); pinMode(led_Right, OUTPUT);
   pinMode(rev_Left, INPUT); pinMode(led_Left, OUTPUT);
 

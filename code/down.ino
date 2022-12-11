@@ -1,14 +1,11 @@
 #include <Servo.h>   
 #include <SoftwareSerial.h>
 #include <LiquidCrystal_I2C.h>
-#include <DFRobotDFPlayerMini.h>
 
 #define btnPin 9
 #define BT_TXD 10
 #define BT_RXD 11
 #define humanPin 7
-#define MP3Pin_1 4
-#define MP3Pin_2 5
 
 //블루투스
 SoftwareSerial bluetooth(BT_RXD, BT_TXD);
@@ -18,9 +15,6 @@ int statusPIR = 0;
 
 //버튼
 int statusBtn = 0;
-
-//MP3 플레이어
-SoftwareSerial MP3Module(MP3Pin_1, MP3Pin_2);
 
 // LCD
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -113,22 +107,11 @@ void setup()
   lcd.createChar(4, bt3);
   lcd.createChar(5, bt4);
   printLcd();
-
-  // MP3 플레이어
-  MP3Module.begin(9600);
-  if (!MP3Player.begin(MP3Module)) {
-    Serial.println(F("Unable to begin:"));
-    Serial.println(F("1. Please recheck the connection!"));
-    Serial.println(F("2. Please insert the SD card!");
-    while(true);
-  }
-  delay(1);
-  MP3Player.volume(15);
 }
  
 void loop()  
 { 
-  // 블루투스
+  // 블루투스    
   // 아두이노 -> 안드로이드
   if (Serial.available()) {
     char toSend = (char)Serial.read();
@@ -169,9 +152,6 @@ void loop()
       statusBtn=LOW;
     } 
   }
-
-  // MP3 플레이어
-  MP3Player.play(1);
 }
 
 void printLcd(){
